@@ -28,6 +28,7 @@ export default function App() {
   const [operation, setOperation] = useState("");
   const [result, setResult] = useState("");
   const [thirdNumber, setThirdNumber] = useState("");
+  const [counterDot, setCounterDot] = useState(0);
 
   const stylesTheme = { //Stylesheet de cores dos temas
     container: {
@@ -93,33 +94,63 @@ export default function App() {
     }
   }
 
+  const dotfunction = (valueButton) => { // bloquear mais de 1 ponto
+    if(firstNumber != "." &&  firstNumber != "-") {
+      handleNumber(valueButton);
+    }
+  };
+
   const handleNumber = (valueButton) => { //Função chamada ao clicar no botão
     console.log(valueButton);
     if(firstNumber.length < 9) { //Regra do limite de dígitos em 9
       setResult("");
-      setFirstNumber(firstNumber + valueButton);
+      if(valueButton === ".") {
+        if(counterDot != 1) {
+          setCounterDot(counterDot+1);
+        }
+      }
+      if(counterDot != 1) { // nenhum ponto
+        setFirstNumber(firstNumber + valueButton);
+      }
+      if(counterDot === 1) {
+        if(valueButton != ".") {
+          setFirstNumber(firstNumber + valueButton);
+        }
+      }
       
       if(secondNumber != "") { //Apenas para mostrar o terceiro numero da operação
-        setThirdNumber(firstNumber + valueButton);
+        if(counterDot != 1) {
+          setThirdNumber(firstNumber + valueButton);
+        }
+        if(counterDot === 1) {
+          if(valueButton != ".") {
+            setThirdNumber(firstNumber + valueButton);
+          }
+        }
       }
     }
   };
   const handleOperation = (valueButton) => { //Função chamada ao clicar em alguma operação
-    if(firstNumber === "" && valueButton != "*" && valueButton != "/" && valueButton != "%") { // Caso a primeira tecla apertada seja uma operação ao invés de um numero
+    if(firstNumber === "" && valueButton != "*" && valueButton != "/" && valueButton != "%" && valueButton != "+") { // Caso a primeira tecla apertada seja uma operação ao invés de um numero
       if(valueButton != "+/-") { //Para que não seja possível clicar nessa operação sem digitar um numero antes
         setFirstNumber(valueButton);
+        setCounterDot(0);
       }
     }
     else{
-      setOperation(valueButton);
-      setSecondNumber(firstNumber);
-      setFirstNumber("");
+      if(firstNumber != "-") {
+        setOperation(valueButton);
+        setSecondNumber(firstNumber);
+        setFirstNumber("");
+        setCounterDot(0);
+      }
     }
   };
   const clear = () => {
     setFirstNumber("");
     setSecondNumber("");
     setOperation("");
+    setCounterDot(0);
     setResult("");
 
     setThirdNumber("");
@@ -183,7 +214,12 @@ export default function App() {
   };
   const display = () => {
     if(result != "") {
-      return <Text style={result < 99999 ? [stylesKeyboard.displayfirstNumber, stylesTheme.textblock] : [stylesKeyboard.displayfirstNumber, stylesTheme.textblock, {fontSize: 30}]}>{result.toString()}</Text>;
+      if(isNaN(result)) {
+        return <Text style={result < 99999 ? [stylesKeyboard.displayfirstNumber, stylesTheme.textblock] : [stylesKeyboard.displayfirstNumber, stylesTheme.textblock, {fontSize: 30}]}>Math Error. Digite AC</Text>;
+      }
+      else {
+        return <Text style={result < 99999 ? [stylesKeyboard.displayfirstNumber, stylesTheme.textblock] : [stylesKeyboard.displayfirstNumber, stylesTheme.textblock, {fontSize: 30}]}>{result.toString()}</Text>;
+      }
     }
     if(firstNumber && firstNumber.length < 6) {
       return <Text style={[stylesTheme.textblock, stylesKeyboard.displayfirstNumber]}>{firstNumber}</Text>;
@@ -224,7 +260,7 @@ export default function App() {
         <View style={[styles.operations, stylesTheme.operations]}>
           <View style={styles.row}>
             <TouchableHighlight style={[styles.block, stylesTheme.block]} onPress={clear} underlayColor="#48D9C0">{functionAC()}</TouchableHighlight>
-            <TouchableHighlight style={[styles.block, stylesTheme.block]} onPress={() => handleOperation("+/-")} underlayColor="#48D9C0"><MaterialCommunityIcons name="plus-minus" size={30} color="#20d6a6"/></TouchableHighlight>
+            <TouchableHighlight style={[styles.block, stylesTheme.block]} onPress={() => handleOperation("+/-")} underlayColor="#48D9C0"><MaterialCommunityIcons name="plus-minus-variant" size={30} color="#20d6a6"/></TouchableHighlight>
             <TouchableHighlight style={[styles.block, stylesTheme.block]} onPress={() => handleOperation("%")} underlayColor="#48D9C0"><Text style={[[styles.textblock, stylesTheme.textblock], {color: '#20d6a6', fontSize: 25}]}>%</Text></TouchableHighlight>
             <TouchableHighlight style={[styles.block, stylesTheme.block]} onPress={() => handleOperation("/")} underlayColor="red"><MaterialCommunityIcons name="division" size={30} color="#FF7878"/></TouchableHighlight>
           </View>
@@ -249,7 +285,7 @@ export default function App() {
           <View style={styles.row}>
             <TouchableHighlight style={[styles.block, stylesTheme.block]} onPress={() => setFirstNumber(firstNumber.slice(0, -1))}><MaterialCommunityIcons style={[styles.textblock, stylesTheme. textblock]} name="replay"/></TouchableHighlight>
             <TouchableHighlight style={[styles.block, stylesTheme.block]} onPress={() => handleNumber("0")}><Text style={[styles.textblock, stylesTheme.textblock]}>0</Text></TouchableHighlight>
-            <TouchableHighlight style={[styles.block, stylesTheme.block]} onPress={() => handleNumber(".")}><Text style={[[styles.textblock, stylesTheme.textblock], {fontSize: 40}]}>.</Text></TouchableHighlight>
+            <TouchableHighlight style={[styles.block, stylesTheme.block]} onPress={() => dotfunction(".")}><Text style={[[styles.textblock, stylesTheme.textblock], {fontSize: 40}]}>.</Text></TouchableHighlight>
             <TouchableHighlight style={[styles.block, stylesTheme.block]} onPress={() => getResult()} underlayColor="red"><Text style={[[styles.textblock, stylesTheme.textblock], {color: '#FF7878', fontSize: 40}]}>=</Text></TouchableHighlight>
           </View>
         </View>
