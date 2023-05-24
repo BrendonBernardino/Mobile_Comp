@@ -68,22 +68,32 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.linha}>
-        <Text>{city} - {state}</Text>
+      <View style={[styles.linha, styles.localidade]}>
+        <Text style={{fontWeight: "bold", fontSize: 23}}>{city} - {state}</Text>
       </View>
-      <View style={styles.linha}>
-        <Text>{date}</Text>
+      <View style={[styles.linha, styles.data]}>
+        <Text style={{color: "white", fontWeight: "bold", fontSize: 16}}>{date}</Text>
       </View>
-      <View style={styles.linha}>
-        <Text>ensolarado</Text>
+      <View style={[styles.linha, styles.status]}>
+        <Text style={{fontSize: 17, fontWeight: "bold"}}>ensolarado</Text>
       </View>
-      <View style={styles.linha}>
-        <Text>{temperature}</Text>
+      <View style={[styles.linha, styles.temp]}>
+        <Text style={{fontSize: 165, fontWeight: "bold"}}>{temperature}</Text>
       </View>
-      <View style={styles.linha}>
+      <View style={[styles.linha, styles.resumo]}>
+        <Text>Resumo diárioS</Text>
         <Text>{daily_summary}</Text>
       </View>
-      <View style={styles.linha}>
+      <View style={[styles.linha, styles.card]}>
+        <View style={[styles.coluna, styles.vhv]}>
+
+        </View>
+        <View>
+
+        </View>
+        <View>
+
+        </View>
         <Text>{wind} - {humidity} - {visibility}</Text>
       </View>
 
@@ -99,8 +109,55 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   linha: {
+    flex: 1,
     display: 'flex',
     justifyContent: 'center',
     alignItens: 'center'
+  },
+  localidade: {
+    flex: 0.3,
+    // backgroundColor: "pink",
+    // paddingTop: "5%",
+    // width: "50%",
+    marginTop: "20%",
+    marginBottom: "5%",
+    // marginVertical: "5%",
+  },
+  data: {
+    flex: 0.35,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "black",
+    width: "50%",
+    // marginVertical: "20%",
+    borderRadius: 25,
+  },
+  status: {
+    flex: 0.3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: "5%",
+  },
+  temp: {
+    flex: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  resumo: {
+    flex: 1,
+    width: "80%",
+  },
+  card: {
+    flex: 1,
+    backgroundColor: "black",
+    marginBottom: "15%",
+    width: "80%",
+    borderRadius: 15,
+  },
+  coluna: {
+
+  },
+  vhv: {
+
   }
 });
