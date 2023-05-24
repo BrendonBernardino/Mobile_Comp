@@ -1,0 +1,172 @@
+[
+  {
+    "state": "CE",
+    "city": "Fortaleza",
+    "date": "terça-feira, 23 de maio",
+    "temperature": "31º",
+    "daily_summary": "Agora, sensação térmica de +34º. Possíveis pancadas de chuva ao final do dia.",
+    "wind": "44 km/h",
+    "humidity": "48%",
+    "visibility": "1,6 km"
+  },
+  {
+    "state": "SP",
+    "city": "São Paulo",
+    "date": "quarta-feira, 24 de maio",
+    "temperature": "25º",
+    "daily_summary": "Dia ensolarado com temperatura amena. Sem previsão de chuva.",
+    "wind": "12 km/h",
+    "humidity": "62%",
+    "visibility": "10 km"
+  },
+  {
+    "state": "RJ",
+    "city": "Rio de Janeiro",
+    "date": "quinta-feira, 25 de maio",
+    "temperature": "28º",
+    "daily_summary": "Céu parcialmente nublado. Possibilidade de chuva isolada.",
+    "wind": "20 km/h",
+    "humidity": "55%",
+    "visibility": "5 km"
+  },
+  {
+    "state": "BA",
+    "city": "Salvador",
+    "date": "sexta-feira, 26 de maio",
+    "temperature": "30º",
+    "daily_summary": "Sol e calor durante todo o dia. Não há previsão de chuva.",
+    "wind": "18 km/h",
+    "humidity": "50%",
+    "visibility": "8 km"
+  },
+  {
+    "state": "MG",
+    "city": "Belo Horizonte",
+    "date": "sábado, 27 de maio",
+    "temperature": "22º",
+    "daily_summary": "Céu parcialmente nublado. Possibilidade de chuva fraca.",
+    "wind": "10 km/h",
+    "humidity": "70%",
+    "visibility": "6 km"
+  },
+  {
+    "state": "RS",
+    "city": "Porto Alegre",
+    "date": "domingo, 28 de maio",
+    "temperature": "18º",
+    "daily_summary": "Dia frio e nublado. Chuva moderada ao longo do dia.",
+    "wind": "30 km/h",
+    "humidity": "80%",
+    "visibility": "3 km"
+  },
+  {
+    "state": "PR",
+    "city": "Curitiba",
+    "date": "segunda-feira, 29 de maio",
+    "temperature": "20º",
+    "daily_summary": "Céu encoberto. Possibilidade de garoa durante a tarde.",
+    "wind": "15 km/h",
+    "humidity": "65%",
+    "visibility": "4 km"
+  },
+  {
+    "state": "PE",
+    "city": "Recife",
+    "date": "terça-feira, 30 de maio",
+    "temperature": "28º",
+    "daily_summary": "Sol e calor durante todo o dia. Não há previsão de chuva.",
+    "wind": "22 km/h",
+    "humidity": "55%",
+    "visibility": "7 km"
+  },
+  {
+    "state": "AM",
+    "city": "Manaus",
+    "date": "quarta-feira, 31 de maio",
+    "temperature": "33º",
+    "daily_summary": "Dia quente com sol intenso. Possibilidade de chuvas isoladas.",
+    "wind": "16 km/h",
+    "humidity": "60%",
+    "visibility": "9 km"
+  },
+  {
+    "state": "SC",
+    "city": "Florianópolis",
+    "date": "quinta-feira, 1 de junho",
+    "temperature": "21º",
+    "daily_summary": "Céu parcialmente nublado. Ventos moderados durante o dia.",
+    "wind": "25 km/h",
+    "humidity": "70%",
+    "visibility": "5 km"
+  },
+  {
+    "state": "GO",
+    "city": "Goiânia",
+    "date": "sexta-feira, 2 de junho",
+    "temperature": "29º",
+    "daily_summary": "Dia ensolarado e quente. Sem previsão de chuva.",
+    "wind": "10 km/h",
+    "humidity": "45%",
+    "visibility": "10 km"
+  },
+  {
+    "state": "ES",
+    "city": "Vitória",
+    "date": "sábado, 3 de junho",
+    "temperature": "26º",
+    "daily_summary": "Sol com algumas nuvens. Possibilidade de pancadas de chuva.",
+    "wind": "14 km/h",
+    "humidity": "55%",
+    "visibility": "8 km"
+  },
+  {
+    "state": "PA",
+    "city": "Belém",
+    "date": "domingo, 4 de junho",
+    "temperature": "32º",
+    "daily_summary": "Dia quente e úmido. Possibilidade de chuva forte.",
+    "wind": "28 km/h",
+    "humidity": "75%",
+    "visibility": "3 km"
+  },
+  {
+    "state": "MT",
+    "city": "Cuiabá",
+    "date": "segunda-feira, 5 de junho",
+    "temperature": "35º",
+    "daily_summary": "Dia extremamente quente. Cuidado com a exposição ao sol.",
+    "wind": "8 km/h",
+    "humidity": "40%",
+    "visibility": "12 km"
+  },
+  {
+    "state": "AL",
+    "city": "Maceió",
+    "date": "terça-feira, 6 de junho",
+    "temperature": "29º",
+    "daily_summary": "Sol e calor durante todo o dia. Não há previsão de chuva.",
+    "wind": "20 km/h",
+    "humidity": "50%",
+    "visibility": "9 km"
+  },
+  {
+    "state": "PB",
+    "city": "João Pessoa",
+    "date": "quarta-feira, 7 de junho",
+    "temperature": "27º",
+    "daily_summary": "Céu parcialmente nublado. Possibilidade de pancadas de chuva.",
+    "wind": "18 km/h",
+    "humidity": "65%",
+    "visibility": "7 km"
+  },
+  {
+    "state": "RO",
+    "city": "Porto Velho",
+    "date": "quinta-feira, 8 de junho",
+    "temperature": "30º",
+    "daily_summary": "Sol com algumas nuvens. Possibilidade de pancadas de chuva.",
+    "wind": "12 km/h",
+    "humidity": "60%",
+    "visibility": "6 km"
+  }
+]
