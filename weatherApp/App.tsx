@@ -1,6 +1,7 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useState, useEffect } from 'react'
 import { FontAwesome5 } from 'react-native-vector-icons'
+import { SelectList } from 'react-native-dropdown-select-list';
 import * as weatherData from "./data.json"
 
 type DataArray = Data[]
@@ -16,17 +17,8 @@ interface Data {
   visibility: string;
 }
 
-/*
-ensolarado, sol
-nublado, encoberto
-chuvoso, chuva forte
-*/
-
 export default function App() {
-  const [newCity       , setNewCity]       = useState("");
   const [id            , setId]            = useState(0);
-  const [city          , setCity]          = useState("");
-  const [state         , setState]         = useState("");
   const [date          , setDate]          = useState("");
   const [temperature   , setTemperature]   = useState("");
   const [dailyStatus   , setDailyStatus]   = useState("");
@@ -37,53 +29,6 @@ export default function App() {
 
   const json = JSON.stringify(weatherData);
   let weather: DataArray = JSON.parse(json);
-  
-  async function api() {
-    const res = await fetch("./data.json");
-    console.log(res);
-    return res;
-  }
-
-  const verifyCity = (inputCity: String) => {
-    if(inputCity.startsWith("Fortal")||inputCity.startsWith("fortal"))
-      setId(0);
-    if(inputCity.startsWith("São")||inputCity.startsWith("são")||inputCity.startsWith("Sao")||inputCity.startsWith("sao")||inputCity.startsWith("SP")||
-      inputCity.startsWith("sp"))
-      setId(1);
-    if(inputCity.startsWith("Rio")||inputCity.startsWith("rio")||inputCity.startsWith("RJ")||inputCity.startsWith("rj"))
-      setId(2);
-    if(inputCity.startsWith("Salva")||inputCity.startsWith("salva"))
-      setId(3);
-    if(inputCity.startsWith("Belo")||inputCity.startsWith("belo")||inputCity.startsWith("BH")||inputCity.startsWith("bh"))
-      setId(4);
-    if(inputCity.startsWith("Porto A")||inputCity.startsWith("porto A")||inputCity.startsWith("Porto a")||inputCity.startsWith("porto a"))
-      setId(5);
-    if(inputCity.startsWith("Cur")||inputCity.startsWith("cur"))
-      setId(6);
-    if(inputCity.startsWith("Rec")||inputCity.startsWith("rec"))
-      setId(7);
-    if(inputCity.startsWith("Man")||inputCity.startsWith("man"))
-      setId(8);
-    if(inputCity.startsWith("Flori")||inputCity.startsWith("flori"))
-      setId(9);
-    if(inputCity.startsWith("Goi")||inputCity.startsWith("goi"))
-      setId(10);
-    if(inputCity.startsWith("Vit")||inputCity.startsWith("vit"))
-      setId(11);
-    if(inputCity.startsWith("Bél")||inputCity.startsWith("bél")||inputCity.startsWith("Bel")||inputCity.startsWith("bel"))
-      setId(12);
-    if(inputCity.startsWith("Cui")||inputCity.startsWith("cui"))
-      setId(13);
-    if(inputCity.startsWith("Mac")||inputCity.startsWith("mac"))
-      setId(14);
-    if(inputCity.startsWith("Jo")||inputCity.startsWith("jo"))
-      setId(15);
-    if(inputCity.startsWith("Porto V")||inputCity.startsWith("porto V")||inputCity.startsWith("Porto v")||inputCity.startsWith("porto v"))
-      setId(16);
-    else {
-      setId(-1);
-    }
-  }
 
   const verifyDailySummary = (summary: String) => {
     if(summary.indexOf("ensolarado") != -1 || 
@@ -105,13 +50,8 @@ export default function App() {
   
   const changeCity = (datajson: DataArray) => {
     let weatherSelect: Data = datajson[id]
-    // weatherSelect = weather2[inputCity]
-    if(id === -1) {
-      <Text>Essa cidade não está disponível.</Text>
-    }
-    else {
-      setCity(weatherSelect.city)
-      setState(weatherSelect.state)
+
+    if(id >= 0 && id < 17) {
       setDate(weatherSelect.date)       
       setTemperature(weatherSelect.temperature)
       setDaily_summary(weatherSelect.daily_summary)
@@ -123,35 +63,44 @@ export default function App() {
     }
   }
 
-  // const handleKeyDown = (event) => {
-  //   if (event.key === 'Enter') {
-  //     // 👇 Get input value
-  //     setNewCity(text);
-  //   }
-  // };
+  const data = (localization: DataArray) => [
+    {key:'0', value: localization[0].city+" - "+localization[0].state},
+    {key:'1', value: localization[1].city+" - "+localization[1].state},
+    {key:'2', value: localization[2].city+" - "+localization[2].state},
+    {key:'3', value: localization[3].city+" - "+localization[3].state},
+    {key:'4', value: localization[4].city+" - "+localization[4].state},
+    {key:'5', value: localization[5].city+" - "+localization[5].state},
+    {key:'6', value: localization[6].city+" - "+localization[6].state},
+    {key:'7', value: localization[7].city+" - "+localization[7].state},
+    {key:'8', value: localization[8].city+" - "+localization[8].state},
+    {key:'9', value: localization[9].city+" - "+localization[9].state},
+    {key:'10', value: localization[10].city+" - "+localization[10].state},
+    {key:'11', value: localization[11].city+" - "+localization[11].state},
+    {key:'12', value: localization[12].city+" - "+localization[12].state},
+    {key:'13', value: localization[13].city+" - "+localization[13].state},
+    {key:'14', value: localization[14].city+" - "+localization[14].state},
+    {key:'15', value: localization[15].city+" - "+localization[15].state},
+    {key:'16', value: localization[16].city+" - "+localization[16].state},
+  ];
 
   useEffect(() => {
-    verifyCity(newCity);
     changeCity(weather)
-
-    // console.log(weather2[2])
-    // console.table(weather2.wind)
-    // fetch(require("data.json"))
-    //   .then((response) => response.json())
-    //   .then((data) => setState(data.state))
-    //   .catch(() => console.log("Erro 111"))
-    //   .finally(() => console.log(state));
-
-    // setState(weather2.city)
-    // setCity(pics.city
-    // console.log(state)
-  }, [newCity]);
+  }, [id]);
 
 
   return (
     <View style={styles.container}>
       <View style={[styles.linha, styles.localidade]}>
-        <TextInput style={styles.input} placeholder="Digite uma cidade capital do Brasil" onChangeText={(text) => {setNewCity(text)}} /* onSubmitEditing={() => setNewCity(newCity)}*/>{city} - {state}</TextInput>
+        <SelectList
+          data={data(weather)}
+          defaultOption={{key:'0', value:weather[0].city+" - "+weather[0].state}}
+          search={false}
+          setSelected={setId}
+          boxStyles={{borderWidth: 0, top:"0%"}}
+          inputStyles={{height: "100%", fontSize: 20, fontWeight: "bold"}}
+          dropdownStyles={{height: "70%", bottom: "20%"}}
+          arrowicon={<Text></Text>}
+        />
       </View>
       <View style={[styles.linha, styles.data]}>
         <Text style={{color: "white", fontWeight: "bold", fontSize: 16, flex: 0.5}}>{date}</Text>
@@ -183,7 +132,6 @@ export default function App() {
           <Text style={{color: "yellow", fontSize: 12}}>visibilidade</Text>
         </View>
       </View>
-
     </View>
   );
 }
@@ -197,25 +145,19 @@ const styles = StyleSheet.create({
   },
   linha: {
     flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItens: 'center'
-  },
-  localidade: {
-    flex: 0.3,
     justifyContent: 'center',
     alignItens: 'center',
-    // backgroundColor: "pink",
-    // paddingTop: "5%",
-    // width: "50%",
-    marginTop: "20%",
+  },
+  localidade: {
+    flex: 0.7,
+    justifyContent: 'center',
+    alignItens: 'center',
+    marginTop: "10%",
     marginBottom: "5%",
-    // marginVertical: "5%",
   },
   input: {
     flex: 1,
     justifyContent: 'center',
-    // alignItens: 'center',
     fontSize: 23,
     fontWeight: "bold",
   },
@@ -225,7 +167,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: "black",
     width: "60%",
-    // marginVertical: "20%",
     borderRadius: 25,
   },
   status: {
@@ -238,16 +179,12 @@ const styles = StyleSheet.create({
     flex: 2,
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: "pink",
-    // marginHorizontal: "16%",
   },
   resumo: {
     flex: 1,
     width: "80%",
-    // backgroundColor: "blue",
   },
   daily: {
-    // flex: 1,
     fontWeight: "bold",
     alignItems: 'center',
     justifyContent: 'center',
@@ -268,10 +205,7 @@ const styles = StyleSheet.create({
   },
   vhv: {
     flex: 0.5,
-    // flexDirection: "column",
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: "gray",
-    // marginTop: "5%",
   }
 });
