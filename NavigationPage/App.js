@@ -5,7 +5,6 @@ import { MaterialCommunityIcons, Entypo, FontAwesome, AntDesign, SimpleLineIcons
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 function HomeScreen({ navigation, route }) {
-  const [error, setError] = useState(null);
   const [avatar, setAvatar] = useState(null);
   const [login, setLogin] = useState(null);
   const [name, setName] = useState(null);
@@ -18,19 +17,33 @@ function HomeScreen({ navigation, route }) {
   const url = "https://api.github.com/users/"
 
   useEffect(() => {
-    fetch(url + id) //"https://api.github.com/users/brendonbernardino"
+    fetch(url + id)
     .then((response) => response.json())
-    .then((data) => {[setAvatar(data.avatar_url), setLogin(data.login), setName(data.name), 
-                  setBio(data.bio), setOrgsURL(data.organizations_url), setRepoURL(data.repos_url), setFollowURL(data.followers_url)]
-                  setError(0)
-                  console.log(id)
-                })
-    .catch(() => {
-      setError(1),
-      console.log("Erro")
-    })
+    .then((data) => perfilNotIdentified(data))
+    .catch(() => console.log("Erro"))
     .finally(() => console.log("Finalizado"));
   }, [id]);
+
+  const perfilNotIdentified = (data) => {
+    if(data.login === undefined) {
+      setAvatar("https://avatars.githubusercontent.com/u/3641454?v=4");
+      setLogin("Não foi possível carregar as informações da bio");
+      setName("Unknown");
+      setBio("Não há biografia disponível");
+      setOrgsURL("Não há organizações disponíveis");
+      setRepoURL("Não há repositórios disponíveis");
+      setFollowURL("Não há seguidores disponíveis");
+    }
+    else {
+      setAvatar(data.avatar_url);
+      setLogin("@"+data.login);
+      setName(data.name);
+      setBio(data.bio);
+      setOrgsURL(data.organizations_url);
+      setRepoURL(data.repos_url);
+      setFollowURL(data.followers_url);
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -42,7 +55,7 @@ function HomeScreen({ navigation, route }) {
           </TouchableOpacity>
         </View>
         <View style={styles.nome}><Text style={{fontWeight: "bold", fontSize: 23}}>{name}</Text></View>
-        <View style={styles.arroba}><Text style={{fontSize: 17, color: "#b5b5b5"}}>@{login}</Text></View>
+        <View style={styles.arroba}><Text style={{fontSize: 17, color: "#b5b5b5"}}>{login}</Text></View>
       </View>
       <View style={styles.blocoNavegacao}>
         <TouchableOpacity style={[styles.linha, {borderTopEndRadius: 17, borderTopStartRadius: 17, borderWidth: 0.01}]} onPress={() => navigation.navigate("Bio", {bio})}>
@@ -79,7 +92,7 @@ function HomeScreen({ navigation, route }) {
         </TouchableOpacity>
       </View>
       <View style={styles.blocoReset}>
-        <TouchableOpacity style={styles.resetlinha}>
+        <TouchableOpacity style={styles.resetlinha} onPress={() => navigation.goBack()}>
           <View style={styles.reseticon}><Ionicons name= "exit-outline" style={{fontSize: 20}}></Ionicons></View>
           <View style={styles.resetar}><Text style={{fontWeight: "bold", fontSize: 17}}>Resetar</Text></View>
         </TouchableOpacity>
@@ -93,9 +106,20 @@ function SearchScreen({navigation}) {
 
   return (
     <View style={styles.searchScreen}>
-      <TextInput placeholder='Digite aqui o ID do usuario' onChangeText={(text) => {setId(text);}}/>
+      <TextInput 
+        placeholder='Digite aqui o ID do usuario' 
+        onChangeText={(text) => {setId(text);}}
+      />
       <TouchableOpacity onPress={() => navigation.navigate("Tela de Pesquisa", {id})}>
-        <Entypo name= "magnifying-glass" style={{fontSize: 50, color: "black", paddingTop: "5%"}}></Entypo>
+        <Entypo 
+          name= "magnifying-glass" 
+          style={{
+            fontSize: 50, 
+            color: "black", 
+            paddingTop: "5%"
+          }}
+        >
+        </Entypo>
       </TouchableOpacity>
     </View>
   );
@@ -105,8 +129,24 @@ function BioScreen({route}) {
   const { bio } = route.params;
 
   return (
-    <View style={styles.bioScreen}>
-      <Text style={{fontSize: 15}}>{bio}</Text>
+    <View 
+      style={[
+        styles.bioScreen,
+        {
+        fontSize: 10,
+        borderRadius: 10,
+        borderWidth: 0.5,
+        borderColor: "black",
+        }
+      ]}
+    >
+      <Text 
+        style={{
+          textAlign: "center",
+          verticalAlign: "middle"
+        }}
+      >
+        {bio}</Text>
     </View>
   );
 }
@@ -119,21 +159,35 @@ function OrgsScreen({route}) {
     fetch(orgsURL)
     .then(response => response.json())
     .then(data => setOrgsList(data))
-    .catch(() => setOrgsList('Falha na requisição: Organizações'))
+    .catch(() => setOrgsList(""))
     .finally(() => console.log("Finalizado"));
   }, []);
+
+  const verifyOrg = () => {
+    if(orgsList === "") {
+      return <Text>Não há organizações disponíveis</Text>;
+    }
+    else {
+      if(orgsList.length > 0) {
+        return (
+          orgsList.map(organizações => {
+            return (
+              <View key={organizações.name}>
+                <Text style={styles.lista}>{organizações.name}</Text>
+              </View>
+            )
+          })
+        )
+      }
+      else
+        return <Text>Não há organizações disponíveis</Text>;
+    }
+  }
 
   return (
     <View style={styles.orgsScreen}>
       <ScrollView>
-      {orgsList.length > 0 ? orgsList.map(organizações => {
-        return (
-          <View key={organizações.name}>
-            <Text style={styles.lista}>{organizações.name}</Text>
-          </View>
-        )
-      })
-      : <Text>Não há organizações disponíveis</Text>}
+        {verifyOrg()}
       </ScrollView>
     </View>
   );
@@ -147,21 +201,35 @@ function RepoScreen({route}) {
     fetch(repoURL)
     .then(response => response.json())
     .then(data => setRepoList(data))
-    .catch(() => setRepoList('Falha na requisição: Repositórios'))
+    .catch(() => setRepoList(""))
     .finally(() => console.log("Finalizado"));
   }, []);
+
+  const verifyRepo = () => {
+    if(repoList === "") {
+      return <Text>Não há repositórios disponíveis</Text>;
+    }
+    else {
+      if(repoList.length > 0) {
+        return(
+          repoList.map(repositorios => {
+            return (
+              <View key={repositorios.name}>
+                <Text style={styles.lista}>{repositorios.name}</Text>
+              </View>
+            )
+          })
+        )
+      }
+      else
+        return <Text>Não há repositórios disponíveis</Text>;
+    }
+  }
 
   return (
     <View style={styles.repoScreen}>
       <ScrollView>
-      {repoList.length > 0 ? repoList.map(repositorios => {
-          return (
-            <View key={repositorios.name}>
-              <Text style={styles.lista}>{repositorios.name}</Text>
-            </View>
-          )
-        })
-      : <Text>Não há repositórios disponíveis</Text>}
+      {verifyRepo()}
       </ScrollView>
     </View>
   );
@@ -176,9 +244,52 @@ function FollowScreen({navigation, route}) {
     fetch(followURL)
     .then(response => response.json())
     .then(data => setFollowList(data))
-    .catch(() => setFollowList('Não há seguidores disponíveis.'))
+    .catch(() => setFollowList(""))
     .finally(() => console.log("Finalizado"));
   }, []);
+
+  const verifyFollow = () => {
+    if(followList === "") {
+      return <Text>Não há seguidores disponíveis</Text>;
+    }
+    else {
+      if(followList.length > 0) {
+        return(
+          followList.map(seguidores => {
+            return (
+              <View 
+                key={seguidores.login} 
+                style={{
+                  flexDirection: "row"
+                }}
+              >
+                <Text 
+                  style={[
+                    styles.lista, 
+                    {marginLeft: "10%", flex: 1
+                  }]} 
+                  onPress={() => handleUser(seguidores.login)}
+                >
+                  {seguidores.login}
+                </Text>
+                <Image 
+                  style={{
+                    width: "15%", 
+                    height: "80%", 
+                    marginRight: "10%", 
+                    borderRadius: 30,
+                  }} 
+                  source={{uri:seguidores.avatar_url}}
+                />
+              </View>
+            )
+          })
+        )
+      }
+      else
+        return <Text>Não há seguidores disponíveis</Text>;
+    }
+  }
 
   const handleUser = (valueUser) => {
     console.log("handleuser: " + valueUser);
@@ -188,16 +299,7 @@ function FollowScreen({navigation, route}) {
   return (
     <View style={styles.followersScreen}>
       <ScrollView>
-      {followList.length > 0 ? followList.map(seguidores => {
-          return (
-            <View key={seguidores.login}>
-              <Text style={styles.lista} onPress={() => handleUser(seguidores.login)}>
-                {seguidores.login}
-              </Text>
-            </View>
-          )
-        })
-      : <Text>Não há seguidores disponíveis</Text>}
+      {verifyFollow()}
       </ScrollView>
     </View>
   );
@@ -206,8 +308,6 @@ function FollowScreen({navigation, route}) {
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -237,7 +337,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "center",
-    // backgroundColor: "pink",
     width: "50%",
   },
   img: {
@@ -256,8 +355,6 @@ const styles = StyleSheet.create({
     width: "25%",
     height: "22%",
     borderRadius: 13,
-    // padding: "20%",
-    // margin: "20%",
   },
   nome: {
     flex: 0.25,
@@ -282,7 +379,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     width: '100%',
-    // borderRadius: 17,
     borderTopWidth: 0.5,
     borderColor: "#b5b5b5",
   },
@@ -290,7 +386,6 @@ const styles = StyleSheet.create({
     flex: 0.3,
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "white",
     height: "50%",
     padding: "2%",
     borderRadius: 5,
@@ -301,7 +396,6 @@ const styles = StyleSheet.create({
   info: {
     flex: 3,
     alignItems: "flex-start",
-    // backgroundColor: "purple",
     width: "80%",
     height: "55%",
     marginHorizontal: '0%',
@@ -310,7 +404,6 @@ const styles = StyleSheet.create({
     flex: 0.3,
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "red",
     marginHorizontal: '2%',
     height: "40%",
   },
@@ -328,7 +421,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "blue",
     width: "85%",
     margin: "2%",
     marginTop: "4%",
@@ -340,7 +432,6 @@ const styles = StyleSheet.create({
     flex: 0.8,
     alignItems: "flex-end",
     justifyContent: "center",
-    // marginHorizontal: '1%',
   },
   resetar: {
     flex: 1,
@@ -350,18 +441,16 @@ const styles = StyleSheet.create({
   },
   searchScreen: {
     flex: 1,
-    // flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    // marginHorizontal: '5%',
-    // paddingTop: "2%",
   },
   bioScreen: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: '5%',
-    paddingTop: "2%",
+    marginVertical: '60%',
+    padding: "2%",
   },
   orgsScreen: {
     flex: 1,
@@ -377,7 +466,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: '2%',
     paddingTop: "2%",
-    // backgroundColor: "yellow",
   },
   lista: {
     fontSize: 25,
